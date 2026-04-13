@@ -1,0 +1,53 @@
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+
+# ── Virtual environments ──────────────────────────────────────
+.env
+.venv
+env/
+venv/
+ENV/
+
+# ── Testing ───────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.cache/
+
+# ── Model cache ───────────────────────────────────────────────
+model/cache/*.pkl
+model/cache/*.npy
+data/processed/
+
+# ── IDE ───────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Docker ────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── Nginx certs ───────────────────────────────────────────────
+nginx/certs/
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Environment ───────────────────────────────────────────────
+.env
+# Keep .env.example (committed as template)
+!.env.example

@@ -1,0 +1,127 @@
+version: "3.9"
+
+# ════════════════════════════════════════════════════════════════
+#  RecommendAI — Docker Compose
+#
+#  Services:
+#    backend   → FastAPI recommendation API   (port 8000)
+#    frontend  → Streamlit UI                 (port 8501)
+#    mongo     → MongoDB persistence          (port 27017)
+#    redis     → Recommendation cache         (port 6379)
+#    nginx     → Reverse proxy                (port 80 / 443)
+# ════════════════════════════════════════════════════════════════
+
+networks:
+  recsys_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:
+  model_cache:
+
+services:
+
+  # ── MongoDB ────────────────────────────────────────────────
+  mongo:
+    image: mongo:7.0
+    container_name: recsys_mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: recommendai
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - recsys_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ── Redis ─────────────────────────────────────────────────
+  redis:
+    image: redis:7.2-alpine
+    container_name: recsys_redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redis_data:/data
+    networks:
+      - recsys_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend API ───────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: recsys_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - BACKEND_HOST=0.0.0.0
+      - BACKEND_PORT=8000
+    volumes:
+      - model_cache:/app/model/cache
+    networks:
+      - recsys_net
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s   # Engine needs time to build similarity matrix
+
+  # ── Frontend ─────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: recsys_frontend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - BACKEND_URL=http://backend:8000
+    networks:
+      - recsys_net
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # ── Nginx reverse proxy ───────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: recsys_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro      # Mount SSL certs here
+    networks:
+      - recsys_net
+    depends_on:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
