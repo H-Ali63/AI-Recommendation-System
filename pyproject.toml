@@ -1,16 +1,11 @@
-[tool.pytest.ini_options]
-testpaths = ["backend/tests", "model/tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-addopts = "-v --tb=short"
-filterwarnings = ["ignore::DeprecationWarning"]
+[tool.poetry]
+name = "ai-recommendation-system"
+version = "0.1.0"
+description = "AI Recommendation System Backend"
+authors = ["Your Name <your@email.com>"]
 
-[tool.coverage.run]
-source = ["backend", "model"]
-omit = ["*/tests/*", "*/migrations/*"]
-
-[tool.coverage.report]
-show_missing = true
-skip_covered = false
-fail_under = 70
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "*"
+pandas = "*"
+scikit-learn = "*"
