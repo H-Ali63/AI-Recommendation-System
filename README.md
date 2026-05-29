@@ -41,28 +41,28 @@
                        │  └─────────────┘  └─────────────┘    │
                        │             │                        │
                        │  ┌──────────▼─────────────────────┐  │
-                       │  │     ML RECOMMENDATION ENGINE    │ │
-                       │  │                                 | │
-                       │  │  ┌──────────────────────────┐   │ │
-                       │  │  │   DataPreprocessor        │  │ │
-                       │  │  │  • CSV Loading            │  │ │
-                       │  │  │  • TF-IDF Vectorisation   │  │ │
-                       │  │  │  • Feature Engineering    │  │ │
-                       │  │  └────────────┬─────────────┘   │ │
-                       │  │               │                 │ │
-                       │  │  ┌────────────▼─────────────┐   │ │
-                       │  │  │  ContentBasedRecommender  │  │ │
-                       │  │  │  • Cosine Similarity      │  │ │
-                       │  │  │  • Similarity Matrix Cache│  │ │
-                       │  │  └──────────────────────────┘   │ │
-                       │  │  ┌──────────────────────────┐   │ │
-                       │  │  │  CollaborativeRecommender │  │ │
-                       │  │  │  • User-Item Matrix       │  │ │
-                       │  │  │  • User Similarity        │  │ │
-                       │  │  └──────────────────────────┘   │ │
-                       │  │  ┌──────────────────────────┐   │ │
-                       │  │  │    HybridRecommender      │  │ │
-                       │  │  │  • α×Content+(1-α)×Collab │  │ │
+                       │  │     ML RECOMMENDATION ENGINE   │  │
+                       │  │                                |  │
+                       │  │  ┌──────────────────────────┐  │  │
+                       │  │  │   DataPreprocessor        │ │  │
+                       │  │  │  • CSV Loading            │ │  │
+                       │  │  │  • TF-IDF Vectorisation   │ │  │
+                       │  │  │  • Feature Engineering    │ │  │
+                       │  │  └────────────┬─────────────┘  │  │
+                       │  │               │                │  │
+                       │  │  ┌────────────▼─────────────┐  |  │
+                       │  │  │  ContentBasedRecommender  │ │  │
+                       │  │  │  • Cosine Similarity      │ │  │
+                       │  │  │  • Similarity Matrix Cache│ |  │
+                       │  │  └──────────────────────────┘  │  │
+                       │  │  ┌──────────────────────────┐  │  │
+                       │  │  │  CollaborativeRecommender │ |  │
+                       │  │  │  • User-Item Matrix       │ |  │
+                       │  │  │  • User Similarity        │ │  │
+                       │  │  └──────────────────────────┘  │  │
+                       │  │  ┌──────────────────────────┐  │  │
+                       │  │  │    HybridRecommender      │ │  │
+                       │  │  │  • α×Content+(1-α)×Collab │ │  │
                        │  │  └──────────────────────────┘  │  │
                        │  └────────────────────────────────┘  │
                        └──────────────────────────────────────┘
