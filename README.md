@@ -27,7 +27,7 @@
 │   (Port 8501)    │   │  ┌─────────────────────────────┐     │
 │                  │   │  │   API Routes (Controllers)  │     │
 │  ┌────────────┐  │   │  │  /recommend  /search        │     │
-│  │ api_client │──┼───┼─▶│  /titles     /categories   │     │
+│  │ api_client │──┼───┼─▶│  /titles    /categories    |     |
 │  └────────────┘  │   │  └──────────────┬──────────────┘     │
 │  ┌────────────┐  │   │                 │                    │
 │  │ components │  │   │  ┌──────────────▼──────────────┐     │
